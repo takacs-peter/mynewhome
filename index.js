@@ -36,6 +36,16 @@ app.get('/api/salesman', async (req, res) => {
     res.send(result)
 })
 
+app.put('/api/salesman/:id', async (req, res) => {
+    let salesman = await Salesman.findOneAndUpdate(req.params.id, { $set: req.body });
+
+    if (!salesman) res.status(404).send('The salesman was not found with the given ID');
+
+    //TODO - VALIDATION
+
+    res.send(salesman);
+})
+
 app.post('/api/building', async (req, res) => {
     async function createBuilding(body) {
         const building = new Building({
