@@ -37,30 +37,47 @@ app.get('/api/salesman', async (req, res) => {
 })
 
 app.put('/api/salesman/:id', async (req, res) => {
-    let salesman = await Salesman.findOneAndUpdate(req.params.id, { $set: req.body });
-
-    if (!salesman) res.status(404).send('The salesman was not found with the given ID');
+    Salesman.findOneAndUpdate(req.params.id, { $set: req.body }, { new: true })
+        .then((result) => res.send(result))
+        .catch((err) => console.error(err))
 
     //TODO - VALIDATION
 
-    res.send(salesman);
+})
+
+app.delete('/api/salesman/:id', async (req, res) => {
+    Salesman.findByIdAndRemove(req.params.id, (err, salesman) => {
+        if (err) return res.status(500).send(err)
+        const response = {
+            message: "Salesman successfully deleted",
+            id: salesman._id
+        }
+        return res.status(200).send(response)
+    })
+        .then((result) => res.send(body.params.id))
+        .catch((err) => res.status(500).send(err))
 })
 
 app.post('/api/building', async (req, res) => {
     async function createBuilding(body) {
         const building = new Building({
-            name: body.name,
-            city: body.city,
-            sales: body.sales,
-            sold: body.sold,
-            construction_start: body.construction_start,
-            construction_end: body.construction_end,
-            description: body.description
+            ...body
+            // name: body.name,
+            // city: body.city,
+            // sales: body.sales,
+            // sold: body.sold,
+            // construction_start: body.construction_start,
+            // construction_end: body.construction_end,
+            // description: body.description
         })
         return await building.save();
     }
-    const result = await createBuilding(req.body);
-    res.send(result);
+    try {
+        const result = await createBuilding(req.body);
+        res.send(result)
+    } catch (error) {
+        res.send(error);
+    }
 })
 
 app.get('/api/building', async (req, res) => {
@@ -77,6 +94,15 @@ app.get('/api/building/:id', async (req, res) => {
     }
     const result = await readBuilding(req.body);
     res.send(result);
+})
+
+app.delete('/api/building/:id', async (req, res) => {
+    Building.findByIdAndRemove(req.params.id)
+        .then((result) => res.send(result))
+        .catch((err) => {
+            res.status(500).send(err)
+            console.log(err)
+        })
 })
 
 
