@@ -14,7 +14,8 @@ mongoose.connect(config.dbconnection, { useNewUrlParser: true })
 
 const Salesman = mongoose.model('Salesman', schemas.salesman);
 const Building = mongoose.model('Building', schemas.building);
-
+const House = mongoose.model('House', schemas.house);
+const Defaults = mongoose.model('Defaults', schemas.defaults);
 
 app.post('/api/salesman', async (req, res) => {
     async function createSalesman(body) {
@@ -62,13 +63,6 @@ app.post('/api/building', async (req, res) => {
     async function createBuilding(body) {
         const building = new Building({
             ...body
-            // name: body.name,
-            // city: body.city,
-            // sales: body.sales,
-            // sold: body.sold,
-            // construction_start: body.construction_start,
-            // construction_end: body.construction_end,
-            // description: body.description
         })
         return await building.save();
     }
@@ -105,6 +99,26 @@ app.delete('/api/building/:id', async (req, res) => {
         })
 })
 
+app.put('/api/defaults', async (req, res) => {
+    try {
+        const updatedDefaults = await Defaults.findByIdAndUpdate(
+            '5ba3aadf6bab640e959d7dae',
+            { $set: { ...req.body } },
+            { new: true }
+        )
+        console.log(updatedDefaults)
+        res.send(updatedDefaults)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+
+})
+
+
+app.get('/api/defaults', async (req, res) => {
+    const defaults = await Defaults.find()
+    res.send(defaults)
+})
 
 const port = process.env.port || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

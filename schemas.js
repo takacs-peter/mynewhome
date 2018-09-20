@@ -19,7 +19,7 @@ schemas.building = new mongoose.Schema({
     construction_start: Date,
     construction_end: Date,
     description: String,
-    //techdata
+    techdata: [String],
     //photos
 })
 
@@ -43,4 +43,26 @@ schemas.house = new mongoose.Schema({
     }],
 })
 
+schemas.defaults = new mongoose.Schema({
+    salesman: {
+        name: String,
+        phone: String,
+        //image: Buffer,
+        email: String,
+    },
+    highlighted: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Building'
+    },
+    lowprice: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Building'
+    }],
+    partnerpage: {
+        address: String,
+        about: String,
+        email: String
+    }
+
+})
 module.exports = schemas;
