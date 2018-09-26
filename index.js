@@ -2,20 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const schemas = require('./schemas');
 const bodyParser = require('body-parser');
-const config = require('./config.json');
+const config = require('config');
 
 const app = express();
 app.use(bodyParser.json());
-mongoose.connect(config.dbconnection, { useNewUrlParser: true })
+mongoose.connect(config.DBHost, { useNewUrlParser: true })
     .then(() => {
         console.log('Connected to MongoDB...')
     })
     .catch((err) => console.error('Could not connect to MongoDB'))
 
-const Salesman = mongoose.model('Salesman', schemas.salesman);
-const Building = mongoose.model('Building', schemas.building);
-const House = mongoose.model('House', schemas.house);
-const Defaults = mongoose.model('Defaults', schemas.defaults);
+const Salesman = schemas.salesman;
+const Building = schemas.building;
+const House = schemas.house;
+const Defaults = schemas.defaults;
 
 app.post('/api/salesman', async (req, res) => {
     async function createSalesman(body) {
@@ -38,7 +38,8 @@ app.get('/api/salesman', async (req, res) => {
 })
 
 app.put('/api/salesman/:id', async (req, res) => {
-    Salesman.findOneAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    console.log(req.params.id)
+    Salesman.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
         .then((result) => res.send(result))
         .catch((err) => console.error(err))
 
@@ -48,6 +49,7 @@ app.put('/api/salesman/:id', async (req, res) => {
 
 app.delete('/api/salesman/:id', async (req, res) => {
     Salesman.findByIdAndRemove(req.params.id, (err, salesman) => {
+        console.log('err: ', err)
         if (err) return res.status(500).send(err)
         const response = {
             message: "Salesman successfully deleted",
@@ -55,8 +57,6 @@ app.delete('/api/salesman/:id', async (req, res) => {
         }
         return res.status(200).send(response)
     })
-        .then((result) => res.send(body.params.id))
-        .catch((err) => res.status(500).send(err))
 })
 
 app.post('/api/building', async (req, res) => {
@@ -70,6 +70,7 @@ app.post('/api/building', async (req, res) => {
         const result = await createBuilding(req.body);
         res.send(result)
     } catch (error) {
+        console.log(error.message);
         res.send(error);
     }
 })
@@ -116,9 +117,11 @@ app.put('/api/defaults', async (req, res) => {
 
 
 app.get('/api/defaults', async (req, res) => {
-    const defaults = await Defaults.find()
+    const defaults = await Defaults.findById('5ba3aadf6bab640e959d7dae')
     res.send(defaults)
 })
 
 const port = process.env.port || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
+
+module.exports = app

@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
 let schemas = {};
-schemas.salesman = new mongoose.Schema({
+schemas.salesman = mongoose.model('Salesman', new mongoose.Schema({
     name: String,
     phone: String,
     //image: Buffer,
     email: String,
 })
+)
 
-schemas.building = new mongoose.Schema({
+schemas.building = mongoose.model('Building', new mongoose.Schema({
     name: String,
     city: String,
     sales: {
@@ -22,8 +23,9 @@ schemas.building = new mongoose.Schema({
     techdata: [String],
     //photos
 })
+)
 
-schemas.house = new mongoose.Schema({
+schemas.house = mongoose.model('House', new mongoose.Schema({
     name: String,
     price: Number,
     number: String,
@@ -42,8 +44,9 @@ schemas.house = new mongoose.Schema({
         ref: 'Building'
     }],
 })
+)
 
-schemas.defaults = new mongoose.Schema({
+schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
     salesman: {
         name: String,
         phone: String,
@@ -63,6 +66,7 @@ schemas.defaults = new mongoose.Schema({
         about: String,
         email: String
     }
-
 })
+)
+
 module.exports = schemas;
