@@ -73,19 +73,45 @@ schemas.house = mongoose.model('House', new mongoose.Schema({
     completion: Date,
     heating: String,
     //photos: Buffer,
-    building: [{
+    building: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Building'
-    }],
+        ref: 'Building',
+        default: null
+    },
 })
 )
 
 schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
     salesman: {
-        name: String,
-        phone: String,
+        name: {
+            type: String,
+            required: true,
+            minlength: 5
+        },
+        phone: {
+            type: String,
+            minlength: 7,
+            maxlength: 20,
+            required: true,
+            validate: {
+                validator: function (v) {
+                    return v.match(/[0-9\+\-\(\)\/]/g)
+                },
+                message: 'This is not a valid phone number'
+            }
+        },
         //image: Buffer,
-        email: String,
+        email: {
+            type: String,
+            minlength: 5,
+            validate: {
+                validator: function (v) {
+                    return v.match(/\S+@\S+\.\S+/g)
+                },
+                message: 'This is not a valid e-mail address'
+            },
+            required: true,
+        },
     },
     highlighted: {
         type: mongoose.Schema.Types.ObjectId,
@@ -100,7 +126,30 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
         about: String,
         email: String
     }
-})
+}, { capped: { size: 1024, max: 1, autoIndexId: true } }
 )
+)
+
+schemas.user = {
+    username: {
+        validate: {
+            validator: function (v) {
+                return v.match(/\S+@\S+\.\S+/g)
+            },
+            message: 'This is not a valid e-mail address'
+        },
+        required: true,
+        unique: true,
+    },
+    password: String,
+}
+
+schemas.logins = {
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
+    },
+    token: {}
+}
 
 module.exports = schemas;

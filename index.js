@@ -105,24 +105,25 @@ app.delete('/api/building/:id', async (req, res) => {
             res.status(500).send(err)
         })
 })
-
-app.put('/api/defaults', async (req, res) => {
-    try {
-        const updatedDefaults = await Defaults.findByIdAndUpdate(
-            '5ba3aadf6bab640e959d7dae',
-            { $set: { ...req.body } },
-            { new: true }
-        )
-        res.send(updatedDefaults)
-    } catch (error) {
-        res.status(500).send(error)
+app.post('/api/defaults', async (req, res) => {
+    async function createDefaults(body) {
+        const defaults = new Defaults({
+            ...body
+        })
+        return await defaults.save(async (err, defaults) => {
+            if (err) {
+                res.status(400).send(err.message)
+            } else
+                res.status(200).send(defaults);
+        });
     }
-
+    createDefaults(req.body)
 })
 
 
+
 app.get('/api/defaults', async (req, res) => {
-    const defaults = await Defaults.findById('5ba3aadf6bab640e959d7dae')
+    const defaults = await Defaults.findOne()
     res.send(defaults)
 })
 

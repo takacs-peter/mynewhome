@@ -139,7 +139,11 @@ describe('Schemas', () => {
         });
 
         it('it should not DELETE a salesman given an invalid ID', (done) => {
-            let salesman = new schemas.salesman({ title: "The Chronicles of Narnia", author: "C.S. Lewis", year: 1948, pages: 778 })
+            let salesman = new schemas.salesman({
+                name: "Updated Name",
+                email: "updated@mail.com",
+                phone: "(+36) 70 324-5355"
+            })
             salesman.save((err, salesman) => {
                 chai.request(server)
                     .delete('/api/salesman/' + '23')
