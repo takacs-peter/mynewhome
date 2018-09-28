@@ -24,8 +24,12 @@ app.post('/api/salesman', async (req, res) => {
             phone: body.phone,
             email: body.email,
         })
-        const result = await salesman.save();
-        return result;
+        try {
+            const result = await salesman.save();
+            return result;
+        } catch (ex) {
+            res.status(400).send(ex.message)
+        }
     }
     const result = await createSalesman(req.body);
     res.send(result);
@@ -38,21 +42,25 @@ app.get('/api/salesman', async (req, res) => {
 })
 
 app.put('/api/salesman/:id', async (req, res) => {
-    console.log(req.params.id)
-    Salesman.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-        .then((result) => res.send(result))
-        .catch((err) => console.error(err))
-
-    //TODO - VALIDATION
-
+    Salesman.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        {
+            new: true,
+            runValidators: true
+        },
+        (err, salesman) => {
+            if (err) return res.status(400).send(err);
+            return res.send(salesman)
+        }
+    )
 })
 
 app.delete('/api/salesman/:id', async (req, res) => {
     Salesman.findByIdAndRemove(req.params.id, (err, salesman) => {
-        console.log('err: ', err)
-        if (err) return res.status(500).send(err)
+        if (err) return res.status(404).send(err)
         const response = {
-            message: "Salesman successfully deleted",
+            message: "Salesman successfully deleted!",
             id: salesman._id
         }
         return res.status(200).send(response)
@@ -70,7 +78,6 @@ app.post('/api/building', async (req, res) => {
         const result = await createBuilding(req.body);
         res.send(result)
     } catch (error) {
-        console.log(error.message);
         res.send(error);
     }
 })
@@ -96,7 +103,6 @@ app.delete('/api/building/:id', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => {
             res.status(500).send(err)
-            console.log(err)
         })
 })
 
@@ -107,7 +113,6 @@ app.put('/api/defaults', async (req, res) => {
             { $set: { ...req.body } },
             { new: true }
         )
-        console.log(updatedDefaults)
         res.send(updatedDefaults)
     } catch (error) {
         res.status(500).send(error)

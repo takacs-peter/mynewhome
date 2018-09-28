@@ -2,16 +2,47 @@ const mongoose = require('mongoose');
 
 let schemas = {};
 schemas.salesman = mongoose.model('Salesman', new mongoose.Schema({
-    name: String,
-    phone: String,
+    name: {
+        type: String,
+        required: true,
+        minlength: 5
+    },
+    phone: {
+        type: String,
+        minlength: 7,
+        maxlength: 20,
+        required: true,
+        validate: {
+            validator: function (v) {
+                return v.match(/[0-9\+\-\(\)\/]/g)
+            },
+            message: 'This is not a valid phone number'
+        }
+    },
     //image: Buffer,
-    email: String,
+    email: {
+        type: String,
+        minlength: 5,
+        validate: {
+            validator: function (v) {
+                return v.match(/\S+@\S+\.\S+/g)
+            },
+            message: 'This is not a valid e-mail address'
+        },
+        required: true,
+    },
 })
 )
 
 schemas.building = mongoose.model('Building', new mongoose.Schema({
-    name: String,
-    city: String,
+    name: {
+        type: String,
+        required: true,
+    },
+    city: {
+        type: String,
+        required: true,
+    },
     sales: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Salesman'
@@ -26,7 +57,10 @@ schemas.building = mongoose.model('Building', new mongoose.Schema({
 )
 
 schemas.house = mongoose.model('House', new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true,
+    },
     price: Number,
     number: String,
     description: String,
