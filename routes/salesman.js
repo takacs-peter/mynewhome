@@ -28,6 +28,17 @@ router.get('/', async (req, res) => {
     res.send(result)
 })
 
+router.get('/:id', async (req, res) => {
+    async function getSalesmen() {
+        Salesman.findById(req.params.id, (err, salesman) => {
+            if (err) res.status(404).send()
+            res.send(salesman)
+        })
+    }
+    await getSalesmen();
+
+})
+
 router.put('/:id', async (req, res) => {
     Salesman.findByIdAndUpdate(
         req.params.id,
