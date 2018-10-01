@@ -57,10 +57,10 @@ describe('Schemas', () => {
     });
 
 
-    describe('/POST defaults', () => {
-        it('it should not POST an invalid default document', (done) => {
+    describe('/PUT defaults', () => {
+        it('it should not PUT an invalid default document', (done) => {
             chai.request(server)
-                .post('/api/defaults')
+                .put('/api/defaults')
                 .send({
                     salesman: {
                         name: "Updated Name",
@@ -75,7 +75,7 @@ describe('Schemas', () => {
 
         it('it should POST a valid default', (done) => {
             chai.request(server)
-                .post('/api/defaults')
+                .put('/api/defaults')
                 .send({
                     salesman: {
                         name: "Updated Name",

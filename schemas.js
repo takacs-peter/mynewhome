@@ -85,14 +85,10 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
     salesman: {
         name: {
             type: String,
-            required: true,
-            minlength: 5
         },
         phone: {
             type: String,
-            minlength: 7,
             maxlength: 20,
-            required: true,
             validate: {
                 validator: function (v) {
                     return v.match(/[0-9\+\-\(\)\/]/g)
@@ -103,30 +99,35 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
         //image: Buffer,
         email: {
             type: String,
-            minlength: 5,
             validate: {
                 validator: function (v) {
-                    return v.match(/\S+@\S+\.\S+/g)
+                    return v.match(/\S+@\S+\.\S+/g) || v == ""
                 },
                 message: 'This is not a valid e-mail address'
             },
-            required: true,
         },
     },
     highlighted: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Building'
+        ref: 'Building',
     },
     lowprice: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Building'
+        ref: 'Building',
     }],
     partnerpage: {
-        address: String,
-        about: String,
-        email: String
+        address: {
+            type: String
+        },
+        about: {
+            type: String
+        },
+        email: {
+            type: String
+        }
+
     }
-}, { capped: { size: 1024, max: 1, autoIndexId: true } }
+}
 )
 )
 
@@ -147,7 +148,7 @@ schemas.user = {
 schemas.logins = {
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User
+        ref: schemas.User
     },
     token: {}
 }
