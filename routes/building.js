@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         const result = await createBuilding(req.body);
         res.send(result)
     } catch (error) {
-        res.send(error);
+        res.status(400).send(error);
     }
 })
 
@@ -36,11 +36,32 @@ router.get('/:id', async (req, res) => {
     res.send(result);
 })
 
+router.put('/:id', (req, res) => {
+    Building.findByIdAndUpdate(
+        req.params.id,
+        { $set: req.body },
+        {
+            new: true,
+            runValidators: true
+        },
+        (err, building) => {
+            if (err) return res.status(400).send(err);
+            return res.send(building)
+        }
+    )
+})
+
 router.delete('/:id', async (req, res) => {
     Building.findByIdAndRemove(req.params.id)
-        .then((result) => res.send(result))
+        .then((result) => {
+            const response = {
+                id: req.params.id,
+                message: 'Building successfully deleted!'
+            }
+            res.send(response)
+        })
         .catch((err) => {
-            res.status(500).send(err)
+            res.status(404).send(err)
         })
 })
 

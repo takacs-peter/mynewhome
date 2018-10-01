@@ -24,7 +24,7 @@ describe('Schemas', () => {
     describe('/GET House', () => {
         it('it should GET all the houses', (done) => {
             chai.request(server)
-                .get('/api/house')
+                .get('/api/house/')
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('array');
@@ -38,9 +38,10 @@ describe('Schemas', () => {
         it('it should not POST an invalid house', (done) => {
             let house = {
                 name: false,
+                price: "sdfglkdsgék,t"
             }
             chai.request(server)
-                .post('/api/house')
+                .post('/api/house/')
                 .send(house)
                 .end((err, res) => {
                     res.should.have.status(400);
@@ -64,7 +65,7 @@ describe('Schemas', () => {
                 //photos: Buffer,
             }
             chai.request(server)
-                .post('/api/house')
+                .post('/api/house/')
                 .send(house)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -96,7 +97,7 @@ describe('Schemas', () => {
                 heating: "padlófűtés",
                 //photos: Buffer,
             })
-            house.save((err, house) => {
+            House.save((err, house) => {
                 chai.request(server)
                     .put('/api/house/' + house.id)
                     .send({
