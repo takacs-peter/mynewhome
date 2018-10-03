@@ -125,14 +125,13 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
         email: {
             type: String
         }
-
     }
-}
-)
+})
 )
 
-schemas.user = {
+schemas.user = mongoose.model('User', new mongoose.Schema({
     username: {
+        type: String,
         validate: {
             validator: function (v) {
                 return v.match(/\S+@\S+\.\S+/g)
@@ -142,15 +141,11 @@ schemas.user = {
         required: true,
         unique: true,
     },
-    password: String,
-}
-
-schemas.logins = {
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: schemas.User
-    },
-    token: {}
-}
+    password: {
+        type: String,
+        required: true
+    }
+})
+)
 
 module.exports = schemas;

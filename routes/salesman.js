@@ -31,11 +31,17 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     async function getSalesmen() {
         Salesman.findById(req.params.id, (err, salesman) => {
-            if (err) res.status(404).send()
-            res.send(salesman)
+            if (err) {
+                const errorMessage = {
+                    _id: req.params.id,
+                    message: "Salesman with the given ID not found"
+                }
+                return res.status(404).send(errorMessage)
+            }
+            return res.send(salesman)
         })
     }
-    await getSalesmen();
+    getSalesmen();
 
 })
 

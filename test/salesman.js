@@ -38,16 +38,16 @@ describe('Schemas', () => {
         it('it should GET one existing salesmen', (done) => {
             let Salesman = new schemas.salesman({
                 name: "Old Name",
-                email: "updated@mail.com",
+                email: "test@mail.com",
                 phone: "(+36) 70 324-5355"
             })
             Salesman.save((err, salesman) => {
                 chai.request(server)
-                    .get('/api/salesman' + salesman.id)
+                    .get('/api/salesman/' + salesman.id)
                     .end((err, res) => {
                         res.should.have.status(200);
-                        res.body.should.be.a('array');
-                        res.body.length.should.be.eql(0);
+                        res.body.should.have.property("_id").eql(salesman.id);
+                        res.body.should.have.property("email").eql("test@mail.com");
                         done();
                     });
             });
@@ -60,7 +60,7 @@ describe('Schemas', () => {
             })
             Salesman.save((err, salesman) => {
                 chai.request(server)
-                    .get('/api/salesman' + '1')
+                    .get('/api/salesman/' + '1')
                     .end((err, res) => {
                         res.should.have.status(404);
                         res.body.message.should.be.eql('Salesman with the given ID not found');

@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/takacs-peter/mynewhome#readme",
   "dependencies": {
+    "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
     "config": "^2.0.1",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.11",
     "mongoose": "5.2.8"
   },
   "devDependencies": {
