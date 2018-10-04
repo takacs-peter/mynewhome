@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const schemas = require('../schemas');
+const auth = require('../middleware/auth');
 
 const Defaults = schemas.defaults;
 
-router.put('/', async (req, res) => {
+router.put('/', auth, async (req, res) => {
     async function createDefaults(body) {
         let defaults = await Defaults.findOne()
         if (defaults == null) {

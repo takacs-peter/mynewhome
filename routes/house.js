@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const schemas = require('../schemas');
+const auth = require('../middleware/auth');
 
 const House = schemas.house;
 
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     async function createHouse(body) {
         const building = new House({
             ...body
@@ -25,7 +26,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     House.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },
@@ -40,7 +41,7 @@ router.put('/:id', async (req, res) => {
     )
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     House.findByIdAndRemove(req.params.id)
         .then((result) => {
             const response = {

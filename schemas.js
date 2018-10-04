@@ -1,4 +1,31 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken')
+
+
+
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        validate: {
+            validator: function (v) {
+                return v.match(/\S+@\S+\.\S+/g)
+            },
+            message: 'This is not a valid e-mail address'
+        },
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: true
+    }
+})
+
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({ _id: this._id }, 'mynewhome_jwtPrivateKey')
+    return token;
+}
+
 
 let schemas = {};
 schemas.salesman = mongoose.model('Salesman', new mongoose.Schema({
@@ -129,23 +156,6 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
 })
 )
 
-schemas.user = mongoose.model('User', new mongoose.Schema({
-    username: {
-        type: String,
-        validate: {
-            validator: function (v) {
-                return v.match(/\S+@\S+\.\S+/g)
-            },
-            message: 'This is not a valid e-mail address'
-        },
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true
-    }
-})
-)
+schemas.user = mongoose.model('User', userSchema)
 
 module.exports = schemas;

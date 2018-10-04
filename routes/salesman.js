@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const schemas = require('../schemas');
+const auth = require('../middleware/auth');
 
 const Salesman = schemas.salesman;
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     async function createSalesman(body) {
         const salesman = new Salesman({
             name: body.name,
@@ -45,7 +46,7 @@ router.get('/:id', async (req, res) => {
 
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     Salesman.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },
@@ -60,7 +61,7 @@ router.put('/:id', async (req, res) => {
     )
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     Salesman.findByIdAndRemove(req.params.id, (err, salesman) => {
         if (err) return res.status(404).send(err)
         const response = {

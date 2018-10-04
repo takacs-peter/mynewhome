@@ -12,7 +12,10 @@ router.post('/', async (req, res) => {
 
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) res.status(400).send('Invalid username or password')
-    else res.send(true);
+    else {
+        const token = user.generateAuthToken();
+        res.header('x-auth-token', token).send(_.pick(user, ['_id', 'username']));
+    }
 
 })
 
