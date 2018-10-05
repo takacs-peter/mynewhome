@@ -156,6 +156,14 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
 })
 )
 
+schemas.file = mongoose.model('File', new mongoose.Schema({
+    filename: String,
+    path: String,
+})
+)
+
+
+
 schemas.user = mongoose.model('User', userSchema)
 
 module.exports = schemas;

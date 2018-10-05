@@ -8,6 +8,8 @@ const defaults = require('./routes/defaults');
 const house = require('./routes/house');
 const auth = require('./routes/auth');
 const user = require('./routes/user');
+const photo = require('./routes/photo');
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +20,16 @@ app.use('/api/defaults', defaults);
 app.use('/api/house', house);
 app.use('/api/auth', auth);
 app.use('/api/user', user);
+app.use('/api/photo', photo);
+
+app.use(express.static('public'))
+
+// app.use(multer({
+//     dest: './uploads/',
+//     rename: function (fieldname, filename) {
+//         return filename;
+//     },
+// }));
 
 mongoose.connect(config.DBHost, { useNewUrlParser: true })
     .then(() => {
