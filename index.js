@@ -23,6 +23,7 @@ app.use('/api/user', user);
 app.use('/api/photo', photo);
 
 app.use(express.static('public'))
+app.use(express.static('uploads'))
 
 // app.use(multer({
 //     dest: './uploads/',

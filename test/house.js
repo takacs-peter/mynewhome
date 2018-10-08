@@ -8,19 +8,42 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('..');
 let should = chai.should();
-
-
+const config = require('config');
+const fetch = require('node-fetch')
+let token = 'default'
 chai.use(chaiHttp);
 //Our parent block
-describe('Schemas', () => {
+describe('House schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.house.remove({}, (err) => {
             done();
         });
+        //Login to get token for headers
+
+        fetch(
+            'http://localhost:3000/api/auth/',
+            {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    "username": "test@test.com",
+                    "password": "12345"
+                })
+            })
+            .then(async (response) => {
+                await response.json()
+                token = response.headers.get('x-auth-token')
+            })
+
+        console.log(token)
     });
     /*
       * Test the /GET route
       */
+    console.log(config.get('username'));
     describe('/GET House', () => {
         it('it should GET all the houses', (done) => {
             chai.request(server)
@@ -42,6 +65,7 @@ describe('Schemas', () => {
             }
             chai.request(server)
                 .post('/api/house/')
+                .set('x-auth-token', token)
                 .send(house)
                 .end((err, res) => {
                     res.should.have.status(400);
@@ -66,6 +90,7 @@ describe('Schemas', () => {
             }
             chai.request(server)
                 .post('/api/house/')
+                .set('x-auth-token', token)
                 .send(house)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -100,6 +125,7 @@ describe('Schemas', () => {
             House.save((err, house) => {
                 chai.request(server)
                     .put('/api/house/' + house.id)
+                    .set('x-auth-token', token)
                     .send({
                         name: "House Name",
                         area: "sdfs"
@@ -129,6 +155,7 @@ describe('Schemas', () => {
             House.save((err, house) => {
                 chai.request(server)
                     .put('/api/house/' + house.id)
+                    .set('x-auth-token', token)
                     .send({
                         area: 90
                     })
@@ -163,6 +190,7 @@ describe('Schemas', () => {
             house.save((err, house) => {
                 chai.request(server)
                     .delete('/api/house/' + house.id)
+                    .set('x-auth-token', token)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
@@ -181,6 +209,7 @@ describe('Schemas', () => {
             house.save((err, house) => {
                 chai.request(server)
                     .delete('/api/house/' + '23')
+                    .set('x-auth-token', token)
                     .end((err, res) => {
                         res.should.have.status(404);
                         done();

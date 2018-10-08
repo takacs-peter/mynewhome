@@ -12,7 +12,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 //Our parent block
-describe('Schemas', () => {
+describe('Salesman schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.salesman.remove({}, (err) => {
             done();
@@ -44,6 +44,7 @@ describe('Schemas', () => {
             Salesman.save((err, salesman) => {
                 chai.request(server)
                     .get('/api/salesman/' + salesman.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.have.property("_id").eql(salesman.id);
@@ -61,6 +62,7 @@ describe('Schemas', () => {
             Salesman.save((err, salesman) => {
                 chai.request(server)
                     .get('/api/salesman/' + '1')
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .end((err, res) => {
                         res.should.have.status(404);
                         res.body.message.should.be.eql('Salesman with the given ID not found');
@@ -77,6 +79,7 @@ describe('Schemas', () => {
             }
             chai.request(server)
                 .post('/api/salesman')
+                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                 .send(salesman)
                 .end((err, res) => {
                     res.should.have.status(400);
@@ -92,6 +95,7 @@ describe('Schemas', () => {
             chai.request(server)
                 .post('/api/salesman')
                 .send(salesman)
+                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
@@ -115,6 +119,7 @@ describe('Schemas', () => {
             Salesman.save((err, salesman) => {
                 chai.request(server)
                     .put('/api/salesman/' + salesman.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .send({
                         name: "Updated Name",
                         phone: "sdfs"
@@ -136,6 +141,7 @@ describe('Schemas', () => {
             Salesman.save((err, salesman) => {
                 chai.request(server)
                     .put('/api/salesman/' + salesman.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .send({
                         name: "Updated Name",
                         email: "updated@mail.com",
@@ -165,6 +171,7 @@ describe('Schemas', () => {
             salesman.save((err, salesman) => {
                 chai.request(server)
                     .delete('/api/salesman/' + salesman.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
@@ -183,6 +190,7 @@ describe('Schemas', () => {
             salesman.save((err, salesman) => {
                 chai.request(server)
                     .delete('/api/salesman/' + '23')
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .end((err, res) => {
                         res.should.have.status(404);
                         done();

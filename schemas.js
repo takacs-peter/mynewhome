@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken')
 
-
-
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -46,7 +44,10 @@ schemas.salesman = mongoose.model('Salesman', new mongoose.Schema({
             message: 'This is not a valid phone number'
         }
     },
-    //image: Buffer,
+    photos: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'File',
+    },
     email: {
         type: String,
         minlength: 5,
@@ -79,7 +80,10 @@ schemas.building = mongoose.model('Building', new mongoose.Schema({
     construction_end: Date,
     description: String,
     techdata: [String],
-    //photos
+    photos: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'File',
+    }
 })
 )
 
@@ -99,7 +103,10 @@ schemas.house = mongoose.model('House', new mongoose.Schema({
     real_size: Number,
     completion: Date,
     heating: String,
-    //photos: Buffer,
+    photos: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'File',
+    },
     building: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Building',
@@ -159,6 +166,8 @@ schemas.defaults = mongoose.model('Defaults', new mongoose.Schema({
 schemas.file = mongoose.model('File', new mongoose.Schema({
     filename: String,
     path: String,
+    extension: String,
+    date: Date
 })
 )
 

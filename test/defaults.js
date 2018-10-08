@@ -29,7 +29,7 @@ setup();
 
 chai.use(chaiHttp);
 //Our parent block
-describe('Schemas', () => {
+describe('Default schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.salesman.remove({}, (err) => {
             done();
@@ -61,6 +61,7 @@ describe('Schemas', () => {
         it('it should not PUT an invalid default document', (done) => {
             chai.request(server)
                 .put('/api/defaults')
+                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                 .send({
                     salesman: {
                         name: "Updated Name",
@@ -76,6 +77,7 @@ describe('Schemas', () => {
         it('it should POST a valid default', (done) => {
             chai.request(server)
                 .put('/api/defaults')
+                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                 .send({
                     salesman: {
                         name: "Updated Name",

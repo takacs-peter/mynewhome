@@ -12,7 +12,7 @@ let should = chai.should();
 
 chai.use(chaiHttp);
 //Our parent block
-describe('Schemas', () => {
+describe('Building schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.building.remove({}, (err) => {
             done();
@@ -42,6 +42,7 @@ describe('Schemas', () => {
             }
             chai.request(server)
                 .post('/api/building/')
+                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                 .send(building)
                 .end((err, res) => {
                     res.should.have.status(400);
@@ -63,6 +64,7 @@ describe('Schemas', () => {
             }
             chai.request(server)
                 .post('/api/building/')
+                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                 .send(building)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -94,6 +96,7 @@ describe('Schemas', () => {
             Building.save((err, building) => {
                 chai.request(server)
                     .put('/api/building/' + building.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .send({
                         name: "Building Name",
                         sold: 3
@@ -120,6 +123,7 @@ describe('Schemas', () => {
             Building.save((err, building) => {
                 chai.request(server)
                     .put('/api/building/' + building.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .send({
                         sold: true
                     })
@@ -151,6 +155,7 @@ describe('Schemas', () => {
             building.save((err, building) => {
                 chai.request(server)
                     .delete('/api/building/' + building.id)
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
@@ -169,6 +174,7 @@ describe('Schemas', () => {
             building.save((err, building) => {
                 chai.request(server)
                     .delete('/api/building/' + '23')
+                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
                     .end((err, res) => {
                         res.should.have.status(404);
                         done();
