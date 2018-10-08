@@ -19,24 +19,12 @@ var upload = multer({
     storage: storage
 });
 
-router.post('/', upload.any(), async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
+    console.log(req.file);
 
-    /*req.files has the information regarding the file you are uploading...
-    from the total information, i am just using the path and the imageName to store in the mongo collection(table)
-    */
-    var path = req.files[0].path;
-    var imageName = req.files[0].originalname;
+    var path = req.file.path;
+    var imageName = req.file.originalname;
 
-    // const photo = new Photo({
-    //     filename: imageName,
-    //     path: path
-    // })
-    // photo.save()
-    //     .then((result) => {
-    //         res.send('Image uploaded')
-    //     }, (err) => {
-    //         res.status(500).send(err.message);
-    //     });
 
     async function savePhoto(body) {
         const photo = new Photo({
@@ -47,10 +35,21 @@ router.post('/', upload.any(), async (req, res) => {
     }
     try {
         const result = await savePhoto(req.body);
-        res.send('Image uploaded')
+        console.log(imageName)
+        fs.rename('uploads/' + imageName, getNewFileName(req.file, result), function (err) {
+            if (err) return res.status(500).send('File saving failed')
+            return res.send('File successfully saved')
+        });
     } catch (error) {
         res.status(500).send(error);
     }
 })
+
+function getNewFileName(file, object) {
+    const fileArray = file.filename.split('.')
+    const extension = fileArray[fileArray.length - 1]
+    console.log(extension)
+    return 'uploads/' + object._id + '.' + extension
+}
 
 module.exports = router;
