@@ -8,15 +8,35 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('..');
 let should = chai.should();
-
+let token = "default"
+const fetch = require('node-fetch')
 
 chai.use(chaiHttp);
 //Our parent block
 describe('Building schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.building.remove({}, (err) => {
-            done();
         });
+
+        fetch(
+            'http://localhost:3000/api/auth/',
+            {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    "username": "test@test.com",
+                    "password": "12345"
+                })
+            })
+            .then(async (response) => {
+                await response.json()
+                token = response.headers.get('x-auth-token')
+                done();
+
+            })
     });
     /*
       * Test the /GET route
@@ -42,7 +62,7 @@ describe('Building schema', () => {
             }
             chai.request(server)
                 .post('/api/building/')
-                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                .set('x-auth-token', token)
                 .send(building)
                 .end((err, res) => {
                     res.should.have.status(400);
@@ -64,7 +84,7 @@ describe('Building schema', () => {
             }
             chai.request(server)
                 .post('/api/building/')
-                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                .set('x-auth-token', token)
                 .send(building)
                 .end((err, res) => {
                     res.should.have.status(200);
@@ -96,7 +116,7 @@ describe('Building schema', () => {
             Building.save((err, building) => {
                 chai.request(server)
                     .put('/api/building/' + building.id)
-                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                    .set('x-auth-token', token)
                     .send({
                         name: "Building Name",
                         sold: 3
@@ -123,7 +143,7 @@ describe('Building schema', () => {
             Building.save((err, building) => {
                 chai.request(server)
                     .put('/api/building/' + building.id)
-                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                    .set('x-auth-token', token)
                     .send({
                         sold: true
                     })
@@ -155,7 +175,7 @@ describe('Building schema', () => {
             building.save((err, building) => {
                 chai.request(server)
                     .delete('/api/building/' + building.id)
-                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                    .set('x-auth-token', token)
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
@@ -174,7 +194,7 @@ describe('Building schema', () => {
             building.save((err, building) => {
                 chai.request(server)
                     .delete('/api/building/' + '23')
-                    .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                    .set('x-auth-token', token)
                     .end((err, res) => {
                         res.should.have.status(404);
                         done();

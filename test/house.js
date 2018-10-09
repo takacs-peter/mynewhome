@@ -16,7 +16,6 @@ chai.use(chaiHttp);
 describe('House schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.house.remove({}, (err) => {
-            done();
         });
         //Login to get token for headers
 
@@ -36,14 +35,13 @@ describe('House schema', () => {
             .then(async (response) => {
                 await response.json()
                 token = response.headers.get('x-auth-token')
-            })
+                done();
 
-        console.log(token)
+            })
     });
     /*
       * Test the /GET route
       */
-    console.log(config.get('username'));
     describe('/GET House', () => {
         it('it should GET all the houses', (done) => {
             chai.request(server)

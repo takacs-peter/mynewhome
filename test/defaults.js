@@ -7,6 +7,8 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('..');
 let should = chai.should();
+const fetch = require('node-fetch')
+let token = "default"
 
 async function setup() {
     await new schemas.defaults({
@@ -32,8 +34,27 @@ chai.use(chaiHttp);
 describe('Default schema', () => {
     beforeEach((done) => { //Before each test we empty the database
         schemas.salesman.remove({}, (err) => {
-            done();
+
         });
+        fetch(
+            'http://localhost:3000/api/auth/',
+            {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    "username": "test@test.com",
+                    "password": "12345"
+                })
+            })
+            .then(async (response) => {
+                await response.json()
+                token = response.headers.get('x-auth-token')
+                done();
+
+            })
     });
     /*
       * Test the /GET route
@@ -61,7 +82,7 @@ describe('Default schema', () => {
         it('it should not PUT an invalid default document', (done) => {
             chai.request(server)
                 .put('/api/defaults')
-                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                .set('x-auth-token', token)
                 .send({
                     salesman: {
                         name: "Updated Name",
@@ -77,7 +98,7 @@ describe('Default schema', () => {
         it('it should POST a valid default', (done) => {
             chai.request(server)
                 .put('/api/defaults')
-                .set('x-auth-token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmI1ZmY1MGMzMjI5NzA4YmQ2Nzg4MjMiLCJpYXQiOjE1Mzg2NTQzMjB9.znQ87g0uUlgAsh_es3ESQXSUOhco1n_tyUszuOKMqEE")
+                .set('x-auth-token', token)
                 .send({
                     salesman: {
                         name: "Updated Name",
