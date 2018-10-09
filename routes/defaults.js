@@ -7,7 +7,7 @@ const Defaults = schemas.defaults;
 
 router.put('/', auth, async (req, res) => {
     async function createDefaults(body) {
-        let defaults = await Defaults.findOne()
+        let defaults = await Defaults.findOne().populate('highlighted').populate('lowprice')
         if (defaults == null) {
             const toStore = new Defaults({
                 salesman: {

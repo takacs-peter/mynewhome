@@ -23,7 +23,7 @@ router.post('/', auth, async (req, res) => {
 
 router.get('/', async (req, res) => {
     async function readBuilding() {
-        return await Building.find().populate('sales');
+        return await Building.find().populate('sales').populate('photos');
     }
     const result = await readBuilding(req.body);
     res.send(result);
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     async function readBuilding() {
-        return await Building.find(req.params.id);
+        return await Building.find(req.params.id).populate('sales').populate('photos');
     }
     const result = await readBuilding(req.body);
     res.send(result);

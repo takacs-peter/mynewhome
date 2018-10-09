@@ -24,7 +24,7 @@ router.post('/', auth, async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-    async function getSalesmen() { return await Salesman.find() }
+    async function getSalesmen() { return await Salesman.find().populate('photos') }
     const result = await getSalesmen();
     res.send(result)
 })

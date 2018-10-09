@@ -6,7 +6,7 @@ const auth = require('../middleware/auth');
 const House = schemas.house;
 
 router.get('/', async (req, res) => {
-    const result = await House.find();
+    const result = await House.find().populate('building').populate('photos');
     res.send(result);
 })
 
