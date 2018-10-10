@@ -38,7 +38,7 @@ mongoose.connect(config.DBHost, { useNewUrlParser: true })
     })
     .catch((err) => console.error('Could not connect to MongoDB'))
 
-const port = process.env.port || 3000;
+const port = process.env.port || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 module.exports = app
