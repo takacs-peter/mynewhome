@@ -26,15 +26,14 @@ async function setup() {
         }
     }).save()
 }
-setup();
 
 
 chai.use(chaiHttp);
 //Our parent block
 describe('Default schema', () => {
     beforeEach((done) => { //Before each test we empty the database
-        schemas.salesman.remove({}, (err) => {
-
+        schemas.defaults.remove({}, (err) => {
+            setup()
         });
         fetch(
             'http://localhost:3000/api/auth/',

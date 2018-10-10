@@ -26,18 +26,21 @@ router.put('/', auth, async (req, res) => {
             defaults = await toStore.save()
         }
 
-        Defaults.findOneAndUpdate(
-            { _id: defaults._id },
-            { $set: { ...body } },
+
+        Defaults.findByIdAndUpdate(
+            defaults._id,
+            req.body,
             {
                 new: true,
-                runValidators: true
+                runValidators: true,
+                upsert: false
             },
             (err, result) => {
                 if (err) {
                     res.status(400).send(err.message)
-                } else
+                } else {
                     res.send(result)
+                }
             });
     }
     createDefaults(req.body)
@@ -46,7 +49,7 @@ router.put('/', auth, async (req, res) => {
 
 
 router.get('/', async (req, res) => {
-    const defaults = await Defaults.findOne()
+    const defaults = await Defaults.findOne().populate('highlighted').populate('lowprice')
     res.send(defaults)
 })
 
