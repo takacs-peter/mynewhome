@@ -14,7 +14,7 @@ class Frame extends Component {
                 <nav className="navbar navbar-expand-lg">
                     <div className="container">
                         <a className="navbar-brand--wide" href="index.html">
-                            <img src="assets/images/mynewhome-admin-logo.png" alt="MyNewHome" />
+                            <img src="images/mynewhome-admin-logo.png" alt="MyNewHome" />
                         </a>
                         <div className="collapse navbar-collapse justify-content-end nav__collapse">
                             <ul className="nav navbar-nav">
@@ -30,7 +30,7 @@ class Frame extends Component {
                             </ul>
                         </div>
                         <a className="navbar-brand--mobile" href="index.html">
-                            <img src="assets/images/mynewhome-admin-logo-mobile.png" alt="MyNewHome" />
+                            <img src="images/mynewhome-admin-logo-mobile.png" alt="MyNewHome" />
                         </a>
                         <button className="navbar-toggler mobile-view__btn" onclick="openNav()">
                             <div className="button-bar"></div>
@@ -38,10 +38,10 @@ class Frame extends Component {
                             <div className="button-bar"></div>
                         </button>
                         <div id="myNav" className="mobile-view--overlay">
-                            {/* <a href="javascript:void(0)" className="closebtn" onclick="closeNav()">&times;</a>
+                            <a href="javascript:void(0)" className="closebtn" onclick="closeNav()">&times;</a>
                             <a className="mobile-view__link mobile-view__link--active" href="#">General</a>
                             <a className="mobile-view__link" href="sales.html">Sales</a>
-                            <a className="mobile-view__link" href="buildings.html">Buildings</a> */}
+                            <a className="mobile-view__link" href="buildings.html">Buildings</a>
                         </div>
                     </div>
                 </nav>
